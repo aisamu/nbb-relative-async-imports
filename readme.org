@@ -1,0 +1,81 @@
+#+title: NBB Async Relative imports
+
+**** Node example
+#+begin_src bash :results code :exports both
+fd -d1 -tf 'mjs' src -x sh -c "echo $'\n\n$> node {}'; head -1 {}; node {}"
+#+end_src
+
+#+RESULTS:
+#+begin_src bash
+$> node src/main-imp-del-async.mjs
+// Works; Imperative delayed async import
+Loaded main.mjs
+Loaded helper.mjs
+Loaded index.mjs
+
+
+$> node src/main-imp-async.mjs
+// Works: Imperative async import
+Loaded main.mjs
+Loaded helper.mjs
+Loaded index.mjs
+
+
+$> node src/main-dec-sync.mjs
+// Works: Declarative sync import
+Loaded helper.mjs
+Loaded index.mjs
+Loaded main.mjs
+
+
+$> node src/main-imp-sync.mjs
+// Works: Imperative sync import
+Loaded helper.mjs
+Loaded index.mjs
+Loaded main.mjs
+#+end_src
+
+#+begin_quote
+Note the printing order changes between the synchronous and asynchronous versions
+#+end_quote
+
+**** Clojurescript reproduction
+#+begin_src bash :results code :exports both
+fd -d1 -tf 'cljs' src -x sh -c "echo $'\n\n$> nbb {}'; head -1 {}; nbb --classpath $PWD/src {}"
+#+end_src
+
+#+RESULTS:
+#+begin_src bash
+$> nbb src/main-dec-sync.cljs
+;; Works: Declarative sync import
+Loaded helper.mjs
+Loaded module
+Loaded main.cljs
+
+
+$> nbb src/main-imp-sync.cljs
+;; Works: Imperative sync import
+Loaded helper.mjs
+Loaded module
+Loaded main.cljs
+
+
+$> nbb src/main-imp-del-async.cljs
+;; Fails: Imperative delayed async import
+Loaded main.cljs
+Cannot find module '/Users/aisamu/code/node/nbb-relative-async-imports/src/helper.mjs'
+Require stack:
+- /Users/aisamu/code/node/nbb-relative-async-imports/src/main-imp-del-async.cljs
+
+
+$> nbb src/main-imp-async.cljs
+;; Fails: Imperative delayed async import
+Loaded main.cljs
+Cannot find module '/Users/aisamu/code/node/nbb-relative-async-imports/src/helper.mjs'
+Require stack:
+- /Users/aisamu/code/node/nbb-relative-async-imports/src/main-imp-async.cljs
+#+end_src
+
+#+begin_quote
+Note that it tries to load helper.mjs from =/src/helper.mjs= instead of =/src/modules/module/helper.mjs=
+#+end_quote

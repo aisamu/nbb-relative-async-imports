@@ -60,6 +60,14 @@ Loaded module
 Loaded main.cljs
 
 
+$> nbb src/main-imp-async.cljs
+;; Fails: Imperative delayed async import
+Loaded main.cljs
+Cannot find module '/Users/aisamu/code/node/nbb-relative-async-imports/src/helper.mjs'
+Require stack:
+- /Users/aisamu/code/node/nbb-relative-async-imports/src/main-imp-async.cljs
+
+
 $> nbb src/main-imp-del-async.cljs
 ;; Fails: Imperative delayed async import
 Loaded main.cljs
@@ -68,12 +76,17 @@ Require stack:
 - /Users/aisamu/code/node/nbb-relative-async-imports/src/main-imp-del-async.cljs
 
 
-$> nbb src/main-imp-async.cljs
-;; Fails: Imperative delayed async import
+$> nbb src/main-imp-async-awaited.cljs
+;; Works: Imperative do-delayed async import awaited
+Loaded helper.mjs
+Loaded module
 Loaded main.cljs
-Cannot find module '/Users/aisamu/code/node/nbb-relative-async-imports/src/helper.mjs'
-Require stack:
-- /Users/aisamu/code/node/nbb-relative-async-imports/src/main-imp-async.cljs
+
+
+$> nbb src/main-imp-del-async-awaited.cljs
+;; Half-works: Imperative promise-delayed async import awaited
+Loaded helper.mjs
+Loaded module
 #+end_src
 
 #+begin_quote

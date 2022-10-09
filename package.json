@@ -9,6 +9,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "nbb": "0.7.135"
+    "nbb": "1.0.136"
   }
 }

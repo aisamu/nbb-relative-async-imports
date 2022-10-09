@@ -1,5 +1,9 @@
 #+title: NBB Async Relative imports
 
+#+begin_quote
+*Update*: Relative async imports fixed on https://github.com/babashka/nbb/commit/2c9b5478ed67c3c9258ef40c50e2eb2b12b641fe! 🎉
+#+end_quote
+
 **** Node example
 #+begin_src bash :results code :exports both
 fd -d1 -tf 'mjs' src -x sh -c "echo $'\n\n$> node {}'; head -1 {}; node {}"
@@ -46,13 +50,6 @@ fd -d1 -tf 'cljs' src -x sh -c "echo $'\n\n$> nbb {}'; head -1 {}; nbb --classpa
 
 #+RESULTS:
 #+begin_src bash
-$> nbb src/main-dec-sync.cljs
-;; Works: Declarative sync import
-Loaded helper.mjs
-Loaded module
-Loaded main.cljs
-
-
 $> nbb src/main-imp-sync.cljs
 ;; Works: Imperative sync import
 Loaded helper.mjs
@@ -60,20 +57,25 @@ Loaded module
 Loaded main.cljs
 
 
-$> nbb src/main-imp-async.cljs
-;; Fails: Imperative delayed async import
+$> nbb src/main-dec-sync.cljs
+;; Works: Declarative sync import
+Loaded helper.mjs
+Loaded module
 Loaded main.cljs
-Cannot find module '/Users/aisamu/code/node/nbb-relative-async-imports/src/helper.mjs'
-Require stack:
-- /Users/aisamu/code/node/nbb-relative-async-imports/src/main-imp-async.cljs
 
 
 $> nbb src/main-imp-del-async.cljs
-;; Fails: Imperative delayed async import
+;; Works: Imperative delayed async import
 Loaded main.cljs
-Cannot find module '/Users/aisamu/code/node/nbb-relative-async-imports/src/helper.mjs'
-Require stack:
-- /Users/aisamu/code/node/nbb-relative-async-imports/src/main-imp-del-async.cljs
+Loaded helper.mjs
+Loaded module
+
+
+$> nbb src/main-imp-async.cljs
+;; Works: Imperative delayed async import
+Loaded main.cljs
+Loaded helper.mjs
+Loaded module
 
 
 $> nbb src/main-imp-async-awaited.cljs
@@ -83,12 +85,17 @@ Loaded module
 Loaded main.cljs
 
 
-$> nbb src/main-imp-del-async-awaited.cljs
-;; Half-works: Imperative promise-delayed async import awaited
+$> nbb src/main-imp-async-2.cljs
+;; Works: Imperative delayed async import
 Loaded helper.mjs
 Loaded module
-#+end_src
+Loaded main.cljs
 
-#+begin_quote
-Note that it tries to load helper.mjs from =/src/helper.mjs= instead of =/src/modules/module/helper.mjs=
-#+end_quote
+
+$> nbb src/main-imp-del-async-awaited.cljs
+;; Half-works?: Imperative promise-delayed async import awaited
+Loaded helper.mjs
+Loaded module
+
+;; Missing "Loaded main.cljs"
+#+end_src

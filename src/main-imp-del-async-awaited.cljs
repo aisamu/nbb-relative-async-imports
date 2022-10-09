@@ -1,4 +1,4 @@
-;; Half-works: Imperative promise-delayed async import awaited
+;; Half-works?: Imperative promise-delayed async import awaited
 (ns main
   (:require [promesa.core :as p]
             [nbb.core :refer [await]]))
